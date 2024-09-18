@@ -9,6 +9,7 @@ This project implements a simple web server and a socket server using Python. Th
 - **MongoDB Integration**: Saves each message with a timestamp in MongoDB.
 - **Error Handling**: Graceful handling of socket communication errors and MongoDB connection/authentication issues.
 - **MongoDB Authentication**: Connects to MongoDB using credentials stored in an `.env` file.
+- **Multiprocessing**: Web server and socket server run in parallel processes.
 
 ## Requirements
 
@@ -23,6 +24,7 @@ This project implements a simple web server and a socket server using Python. Th
 ```bash
 .
 ├── .env               # Environment variables (MongoDB and socket server configuration)
+├── main.py            # Main file that runs both servers in parallel
 ├── web_server.py      # Web server code
 ├── socket_server.py   # Socket server code
 ├── templates          # HTML templates directory
@@ -84,27 +86,15 @@ SOCKET_PORT=5000
 1. Start the MongoDB service:
 Make sure MongoDB is running on the configured MONGO_HOST and MONGO_PORT.
 
-2. Run the Socket Server:
-
-In one terminal window, run the socket server:
+2. Run the main.py file:
 
 ```bash
-python socket_server.py
+python main.py
 ```
 
-The socket server will listen on the configured SOCKET_HOST and SOCKET_PORT for incoming messages.
+The web server will listen on the configured PORT (default: 3000), and the socket server will listen on the configured SOCKET_PORT (default: 5000).
 
-3. Run the Web Server:
-
-In another terminal window, run the web server:
-
-```bash
-python web_server.py
-```
-
-The web server will listen on the configured PORT (default: 3000).
-
-4. Access the Web Application:
+3. Access the Web Application:
 
 Open your web browser and navigate to:
 

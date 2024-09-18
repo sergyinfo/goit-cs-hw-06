@@ -190,7 +190,7 @@ class CustomHandler(SimpleHTTPRequestHandler):
             self.wfile.write(b"Socket communication error.")
 
 
-def run(
+def run_web_server(
         server_class: HTTPServer = HTTPServer, 
         handler_class: SimpleHTTPRequestHandler = CustomHandler
     ) -> None:
@@ -204,6 +204,5 @@ def run(
     print(f'Serving on port {PORT}')
     httpd.serve_forever()
 
-
 if __name__ == '__main__':
-    run()
+    run_web_server()
