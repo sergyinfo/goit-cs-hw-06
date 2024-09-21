@@ -1,0 +1,53 @@
+version: '3'
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Docker/web.Dockerfile
+    ports:
+      - "${PORT_HOST}:${PORT}"
+    environment:
+      - PORT=${PORT}
+      - SOCKET_HOST=socket
+      - SOCKET_PORT=${SOCKET_PORT}
+      - MONGO_HOST=${MONGO_HOST}
+      - MONGO_PORT=${MONGO_PORT}
+      - MONGO_DB=${MONGO_DB}
+      - MONGO_COLLECTION=${MONGO_COLLECTION}
+      - MONGO_USER=${MONGO_USER}
+      - MONGO_PASS=${MONGO_PASS}
+      - MONGO_AUTH_DB=${MONGO_AUTH_DB}
+    depends_on:
+      - socket
+      - mongodb
+
+  socket:
+    build:
+      context: .
+      dockerfile: Docker/socker.Dockerfile
+    ports:
+      - "${SOCKET_PORT_HOST}:${SOCKET_PORT}"
+    environment:
+      - SOCKET_PORT=${SOCKET_PORT}
+      - MONGO_HOST=${MONGO_HOST}
+      - MONGO_PORT=${MONGO_PORT}
+      - MONGO_DB=${MONGO_DB}
+      - MONGO_COLLECTION=${MONGO_COLLECTION}
+      - MONGO_USER=${MONGO_USER}
+      - MONGO_PASS=${MONGO_PASS}
+      - MONGO_AUTH_DB=${MONGO_AUTH_DB}
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo:4.4
+    ports:
+      - "${MONGO_PORT_HOST}:${MONGO_PORT}"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASS}
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:

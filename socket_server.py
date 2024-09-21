@@ -18,7 +18,7 @@ load_dotenv()
 
 # MongoDB configuration
 MONGO_HOST = os.getenv('MONGO_HOST', 'localhost')
-MONGO_PORT = int(os.getenv('MONGO_PORT', 27017))
+MONGO_PORT = int(os.getenv('MONGO_PORT', '27017'))
 MONGO_DB = os.getenv('MONGO_DB', 'messages_database')
 MONGO_COLLECTION = os.getenv('MONGO_COLLECTION', 'messages')
 MONGO_USER = os.getenv('MONGO_USER')
@@ -27,11 +27,11 @@ MONGO_AUTH_DB = os.getenv('MONGO_AUTH_DB', 'admin')
 
 # Socket server configuration
 SOCKET_HOST = os.getenv('SOCKET_HOST', 'localhost')
-SOCKET_PORT = int(os.getenv('SOCKET_PORT', 5000))
+SOCKET_PORT = int(os.getenv('SOCKET_PORT', '5000'))
 
 # MongoDB setup
 try:
-    mongo_uri = f"mongodb+srv://{MONGO_USER}:{MONGO_PASS}@{MONGO_HOST}/?retryWrites=true&w=majority&appName=Cluster0"
+    mongo_uri = f"mongodb://{MONGO_USER}:{MONGO_PASS}@{MONGO_HOST}/?retryWrites=true&w=majority&appName=Cluster0"
     client = MongoClient(mongo_uri, serverSelectionTimeoutMS=5000)
     db = client[MONGO_DB]
     messages_collection = db[MONGO_COLLECTION]
