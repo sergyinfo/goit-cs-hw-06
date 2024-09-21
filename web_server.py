@@ -129,38 +129,50 @@ class CustomHandler(SimpleHTTPRequestHandler):
         """
         if self.path == '/submit_message':
             try:
-                # Get the length of the POST data and read it
+                # Log form data parsing
+                print("Parsing form data...")
                 content_length = int(self.headers['Content-Length'])
                 post_data = self.rfile.read(content_length).decode('utf-8')
+                print(f"Raw post data: {post_data}")
+                
+                # Parse form data
                 parsed_data = dict(x.split('=') for x in post_data.split('&'))
+                print(f"Parsed form data: {parsed_data}")
 
-                # Prepare the message to send to the socket server
+                # Create a JSON message
                 message = json.dumps({
                     "username": parsed_data.get('username', ''),
                     "message": parsed_data.get('message', '')
                 })
+                print(f"Message to send: {message}")
 
-                # Send the message to the socket server
-                self.send_to_socket_server(message)
+                # Connect to the socket server
+                try:
+                    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+                        print(f"Connecting to socket server at {SOCKET_HOST}:{SOCKET_PORT}")
+                        sock.connect((SOCKET_HOST, SOCKET_PORT))
+                        sock.sendall(message.encode('utf-8'))
+                        response = sock.recv(1024)
 
-                # Respond to the form submission
-                self.send_response(200)
-                self.end_headers()
-                self.wfile.write(b"Message received and forwarded to socket server.")
-
-            except (ValueError, KeyError) as e:
-                # Handle form parsing errors
-                print(f"Error parsing form data: {e}")
-                self.send_response(400)
-                self.end_headers()
-                self.wfile.write(b"Invalid form data.")
+                    # Send a successful response back to the client
+                    self.send_response(200)
+                    self.end_headers()
+                    self.wfile.write(response)
+                    print("Message sent successfully to the socket server.")
+                except Exception as e:
+                    # Handle any socket errors
+                    print(f"Socket error: {e}")
+                    self.send_response(503)
+                    self.end_headers()
+                    self.wfile.write(b"Socket server unavailable.")
+                    raise
 
             except Exception as e:
-                # Handle any other unexpected errors
-                print(f"Unexpected error: {e}")
+                # If any other errors occur, log them and return a 500 error
+                print(f"Error during POST request handling: {e}")
                 self.send_response(500)
                 self.end_headers()
-                self.wfile.write(b"Internal server error.")
+                self.wfile.write(b"Internal Server Error.")
 
     def send_to_socket_server(self, message: str) -> None:
         """

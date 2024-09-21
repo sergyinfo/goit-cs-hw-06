@@ -1,15 +1,33 @@
 version: '3'
 services:
-  app:
+  web:
     build:
       context: .
-      dockerfile: Docker/multiprocessing.Dockerfile  # Single Dockerfile for both web and socket server
+      dockerfile: Docker/web.Dockerfile
     ports:
-      - "${PORT_HOST}:${PORT}"          # Exposing the web server port
-      - "${SOCKET_PORT_HOST}:${SOCKET_PORT}"  # Exposing the socket server port
+      - "${PORT_HOST}:${PORT}"
     environment:
       - PORT=${PORT}
-      - SOCKET_HOST=${SOCKET_HOST}
+      - SOCKET_HOST=socket
+      - SOCKET_PORT=${SOCKET_PORT}
+      - MONGO_HOST=${MONGO_HOST}
+      - MONGO_PORT=${MONGO_PORT}
+      - MONGO_DB=${MONGO_DB}
+      - MONGO_COLLECTION=${MONGO_COLLECTION}
+      - MONGO_USER=${MONGO_USER}
+      - MONGO_PASS=${MONGO_PASS}
+      - MONGO_AUTH_DB=${MONGO_AUTH_DB}
+    depends_on:
+      - socket
+      - mongodb
+
+  socket:
+    build:
+      context: .
+      dockerfile: Docker/socker.Dockerfile
+    ports:
+      - "${SOCKET_PORT_HOST}:${SOCKET_PORT}"
+    environment:
       - SOCKET_PORT=${SOCKET_PORT}
       - MONGO_HOST=${MONGO_HOST}
       - MONGO_PORT=${MONGO_PORT}

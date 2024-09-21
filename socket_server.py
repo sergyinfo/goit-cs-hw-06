@@ -67,7 +67,7 @@ def socket_server():
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     try:
-        server_socket.bind((SOCKET_HOST, SOCKET_PORT))
+        server_socket.bind(('0.0.0.0', SOCKET_PORT))
         server_socket.listen(5)  # Listen for up to 5 connections
         print(f"Socket server listening on {SOCKET_HOST}:{SOCKET_PORT}")
     except socket.error as e:
