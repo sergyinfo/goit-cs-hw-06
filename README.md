@@ -27,6 +27,10 @@ This project implements a simple web server and a socket server using Python. Th
 ├── main.py            # Main file that runs both servers in parallel
 ├── web_server.py      # Web server code
 ├── socket_server.py   # Socket server code
+├── docker_compose.yml # Configuration file to run project with Docker
+├── Docker             # Docker files
+│   ├── socket.Dockerfile
+│   ├── web.Dockerfile
 ├── templates          # HTML templates directory
 │   ├── index.html
 │   ├── message.html
@@ -104,15 +108,15 @@ http://localhost:3000
 
 You should see the home page (index.html). You can submit a message from the /message page, and it will be sent to the socket server for processing and saved in MongoDB.
 
-## Running the Project with Docker
+# Running the Project with Docker
 
 To run the project using Docker, follow these steps:
 
-### 1. Ensure `.env` File is Configured
+## 1. Ensure `.env` File is Configured
 
 Make sure your `.env` file contains all the necessary configuration values. You can use .env.example to see full list.
 
-### 2. Build and Run Containers
+## 2. Build and Run Containers
 
 Build and start the Docker containers:
 
@@ -126,7 +130,7 @@ This will start the following services:
 - Socket Server on `localhost:5001`# when SOCKET_PORT_HOST = 5001
 - MongoDB exposed on `localhost:27018`# when MONGO_PORT_HOST = 27018
 
-### 3. Check Running Containers
+## 3. Check Running Containers
 
 Verify that the containers are running using:
 
@@ -136,7 +140,7 @@ docker ps
 
 You should see output indicating that the web server, socket server, and MongoDB containers are up and running.
 
-### 4. Access the Application
+## 4. Access the Application
 
 - Web Application: Open your browser and navigate to `http://localhost:3000`.
 - MongoDB: You can connect to MongoDB via `localhost:27018` using the following connection string:
@@ -145,7 +149,7 @@ You should see output indicating that the web server, socket server, and MongoDB
 mongodb://my_user:my_password@localhost:27018/
 ```
 
-### 5. Stopping the Containers
+## 5. Stopping the Containers
 
 To stop the running containers, use the following command:
 
