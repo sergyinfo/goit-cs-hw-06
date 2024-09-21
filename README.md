@@ -82,7 +82,7 @@ SOCKET_HOST=localhost
 SOCKET_PORT=5000
 ```
 
-# Running the Project
+# Running the Project without Docker
 1. Start the MongoDB service:
 Make sure MongoDB is running on the configured MONGO_HOST and MONGO_PORT.
 
@@ -103,3 +103,54 @@ http://localhost:3000
 ```
 
 You should see the home page (index.html). You can submit a message from the /message page, and it will be sent to the socket server for processing and saved in MongoDB.
+
+## Running the Project with Docker
+
+To run the project using Docker, follow these steps:
+
+### 1. Ensure `.env` File is Configured
+
+Make sure your `.env` file contains all the necessary configuration values. You can use .env.example to see full list.
+
+### 2. Build and Run Containers
+
+Build and start the Docker containers:
+
+```bash
+docker-compose up --build
+```
+
+This will start the following services:
+
+- Web Server on `localhost:3000` # when PORT_HOST = 3000
+- Socket Server on `localhost:5001`# when SOCKET_PORT_HOST = 5001
+- MongoDB exposed on `localhost:27018`# when MONGO_PORT_HOST = 27018
+
+### 3. Check Running Containers
+
+Verify that the containers are running using:
+
+```bash
+docker ps
+```
+
+You should see output indicating that the web server, socket server, and MongoDB containers are up and running.
+
+### 4. Access the Application
+
+- Web Application: Open your browser and navigate to `http://localhost:3000`.
+- MongoDB: You can connect to MongoDB via `localhost:27018` using the following connection string:
+
+```bash
+mongodb://my_user:my_password@localhost:27018/
+```
+
+### 5. Stopping the Containers
+
+To stop the running containers, use the following command:
+
+```bash
+docker-compose down
+```
+
+This will stop and remove the containers but preserve the data in the MongoDB volume.
