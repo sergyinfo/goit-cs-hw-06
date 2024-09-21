@@ -10,6 +10,7 @@ This project implements a simple web server and a socket server using Python. Th
 - **Error Handling**: Graceful handling of socket communication errors and MongoDB connection/authentication issues.
 - **MongoDB Authentication**: Connects to MongoDB using credentials stored in an `.env` file.
 - **Multiprocessing**: Web server and socket server run in parallel processes.
+- **Custom setup**: Can be used with or without Docker. Can be used with or without multiprocessing
 
 ## Requirements
 
@@ -27,10 +28,12 @@ This project implements a simple web server and a socket server using Python. Th
 ├── main.py            # Main file that runs both servers in parallel
 ├── web_server.py      # Web server code
 ├── socket_server.py   # Socket server code
-├── docker_compose.yml # Configuration file to run project with Docker
+├── docker_compose.yml # Default configuration file to run project with Docker - uses multiprocessing and main.py
+├── docker_compose_separate_containers.yml # Configuration file to run project with Docker and without multiprocessing
 ├── Docker             # Docker files
-│   ├── socket.Dockerfile
-│   ├── web.Dockerfile
+│   ├── multiprocessing.Dockerfile # uses with docker_compose.yml
+│   ├── socket.Dockerfile # uses with docker_compose_separate_containers.yml
+│   ├── web.Dockerfile # uses with docker_compose_separate_containers.yml
 ├── templates          # HTML templates directory
 │   ├── index.html
 │   ├── message.html
